@@ -1,6 +1,4 @@
 <?php
-// Start a session
-session_start();
 
 // Include database configuration
 include '../config/db.php';
@@ -13,8 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form inputs
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
-    /*$address = trim($_POST['address']);
-    $phone = trim($_POST['phone']);*/
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -22,15 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate inputs
     if (
-        empty($first_name) || empty($last_name) || /*empty($address) ||
-        empty($phone) ||*/ empty($username) || empty($email) ||
+        empty($first_name) || empty($last_name) ||
+        empty($username) || empty($email) ||
         empty($password) || empty($confirm_password)
     ) {
         $error = "All fields are required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Invalid email format.";
-    } elseif (!preg_match('/^[0-9]{10,15}$/', $phone)) {
-        $error = "Invalid phone number. It should contain 10-15 digits.";
+        /*} elseif (!preg_match('/^[0-9]{10,15}$/', $phone)) {
+        $error = "Invalid phone number. It should contain 10-15 digits.";*/
     } elseif ($password !== $confirm_password) {
         $error = "Passwords do not match.";
     } else {
@@ -47,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
             // Insert the user into the database
-            $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, /*address, phone,*/ username, email, password) VALUES (?, ?, /*?, ?,*/ ?, ?, ?)");
-            $stmt->bind_param('sssssss', $first_name, $last_name, /*$address, $phone,*/ $username, $email, $hashed_password);
+            $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, username, email, password) VALUES (?, ?, /*?, ?,*/ ?, ?, ?)");
+            $stmt->bind_param('sssss', $first_name, $last_name, $username, $email, $hashed_password);
 
             if ($stmt->execute()) {
                 $success = "Registration successful. You can now <a href='login.php'>log in</a>.";
@@ -60,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
+<?php include '../includes/header.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -93,16 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" id="last_name" name="last_name" required>
         </div>
 
-        <!---<div class="form-group">
-            <label for="address">Address:</label>
-            <textarea id="address" name="address" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone" required>
-        </div> --->
-
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -128,5 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <p>Already have an account? <a href="login.php">Log in here</a>.</p>
 </body>
+<?php include '../includes/footer.php'; ?>
 
 </html>

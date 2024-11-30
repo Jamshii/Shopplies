@@ -1,37 +1,37 @@
 <?php
-session_start();
+include '../includes/header.php';
 include '../config/db.php'; // Include database connection
 
-// Check if the user is already logged in
-if (isset($_SESSION['user_id'])) {
-    header("Location: home.php");
+/*// Check if the user is already logged in
+if (isset($_SESSION['username'])) {
+    header("Location: homepage.php");
     exit();
-}
+}*/
 
 $error = "";
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
     // Check if admin credentials are used
-    if ($email === 'admin' && $password === 'admin') {
+    if ($username === 'admin' && $password === 'admin') {
         $_SESSION['user_id'] = 0; // Assign a unique ID for admin
-        $_SESSION['user_name'] = 'Admin';
+        $_SESSION['username'] = 'admin';
         $_SESSION['is_admin'] = true; // Flag to identify admin
 
         // Redirect to admin page
-        header("Location: admin.php");
+        header("Location: manage_products.php");
         exit();
     }
 
     // If not admin, proceed with normal user authentication
-    $email = mysqli_real_escape_string($conn, $email);
+    $username = mysqli_real_escape_string($conn, $username);
     $password = mysqli_real_escape_string($conn, $password);
 
     // Check if the user exists
-    $query = "SELECT * FROM users WHERE email = '$email'";
+    $query = "SELECT * FROM users WHERE username = '$username'";
     $result = $conn->query($query);
 
     if ($result && $result->num_rows > 0) {
@@ -41,36 +41,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $user['password'])) {
             // Store user info in session
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['username'] = $user['username'];
             $_SESSION['is_admin'] = false; // Regular user
 
             // Redirect to home page
-            header("Location: home.php");
+            header("Location: homepage.php");
             exit();
         } else {
-            $error = "Invalid email or password.";
+            $error = "Invalid username or password.";
         }
     } else {
-        $error = "No account found with that email.";
+        $error = "No account found with that username.";
     }
 }
 ?>
-
-<?php include '../includes/header.php'; ?>
 <h1>Log In</h1>
 
-<!-- Display error messages -->
-<?php if ($error): ?>
-    <p style="color: red;"><?php echo $error; ?></p>
-<?php endif; ?>
+
 
 <!-- Login Form -->
 <form method="post" action="">
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email" required>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
+    <!-- Display error messages -->
+    <?php if ($error): ?>
+        <p style="color: red;"><?php echo $error; ?></p>
+    <?php endif; ?>
+    <a href="register.php">Don't have an account? Register</a><br>
+    <a href="forgot_password.php">Forgot Password?</a><br>
     <button type="submit">Log In</button>
 </form>
-<a href="register.php">Don't have an account? Register</a>
+
 <?php include '../includes/footer.php'; ?>

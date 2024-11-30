@@ -1,7 +1,5 @@
 <?php
-// Start session
-session_start();
-
+include '../includes/header.php';
 // Include database configuration
 include '../config/db.php';
 
@@ -29,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone']);
 
     // Update user data in the database
-    $stmt = $conn->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, address = ?, phone = ? WHERE username = ?");
+    $stmt = $conn->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, address = ?, phone_number = ? WHERE username = ?");
     $stmt->bind_param("ssssss", $first_name, $last_name, $email, $address, $phone, $username);
     $stmt->execute();
     $stmt->close();
@@ -50,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <?php include '../includes/header.php'; ?>
 
     <main>
         <h1>My Profile</h1>
@@ -78,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="form-group">
                 <label for="phone">Phone:</label>
-                <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
+                <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone_number']); ?>" required>
             </div>
             <button type="submit" class="btn btn-primary">Update Profile</button>
         </form>

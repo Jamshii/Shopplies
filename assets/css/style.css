@@ -25,13 +25,16 @@ header nav a {
 }
 
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: #f8f8f8;
+    padding: 20px;
     text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 20px;
+}
+
+footer .footer-content {
+    font-size: 14px;
+    color: #555;
 }
 
 form {
@@ -43,8 +46,18 @@ form {
     border-radius: 5px;
 }
 
+.manage-products{
+    max-width: 100%;
+}
+
+
 .form-group {
     margin-bottom: 15px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 label {
@@ -81,3 +94,17 @@ button:hover {
     margin-bottom: 15px;
 }
 
+.btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.category-filter {
+    margin: 20px 0;
+}
+
+.category-filter select {
+    padding: 5px;
+    font-size: 16px;
+}
