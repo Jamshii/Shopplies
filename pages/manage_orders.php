@@ -27,7 +27,8 @@ $sql = "
     SELECT 
         o.order_id, 
         o.customer_id, 
-        u.username AS customer_name, 
+        CONCAT(u.first_name, ' ', u.last_name) AS customer_name,
+        u.address,
         o.total_amount, 
         o.order_date, 
         o.delivery_date, 
@@ -57,7 +58,7 @@ $orders = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
 
 <body>
     <h1>Manage Orders</h1>
-    <?php if (isset($message)) echo "<div>$message</div>"; ?>
+    <?php if (isset($message)) echo "<div class='message'>$message</div>"; ?>
 
     <!-- Manage Orders -->
     <section>
@@ -66,6 +67,7 @@ $orders = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
                 <tr>
                     <th>Order ID</th>
                     <th>Customer</th>
+                    <th>Address</th>
                     <th>Product (Quantity)</th>
                     <th>Total Amount</th>
                     <th>Order Date</th>
@@ -84,6 +86,7 @@ $orders = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
                     <tr>
                         <td><?php echo htmlspecialchars($order['order_id']); ?></td>
                         <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
+                        <td><?php echo htmlspecialchars($order['address']); ?></td>
                         <td>
                             <?php
                             // Display product names, quantities, and images
@@ -96,53 +99,31 @@ $orders = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
                             }
                             ?>
                         </td>
-                        <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
+                        <td>&#8369;<?php echo number_format($order['total_amount'], 2); ?></td>
                         <td><?php echo date('F j, Y', strtotime($order['order_date'])); ?></td>
                         <td><?php echo date('F j, Y', strtotime($order['delivery_date'])); ?></td>
                         <td><?php echo htmlspecialchars($order['order_status']); ?></td>
                         <td>
-                            <form method="post" action="">
-                                <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order['order_id']); ?>">
-                                <select name="status">
-                                    <option value="Pending" <?php echo $order['order_status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                                    <option value="Confirmed" <?php echo $order['order_status'] === 'Confirmed' ? 'selected' : ''; ?>>Confirmed</option>
-                                    <option value="Completed" <?php echo $order['order_status'] === 'Completed' ? 'selected' : ''; ?>>Completed</option>
-                                    <option value="Cancelled" <?php echo $order['order_status'] === 'Cancelled' ? 'selected' : ''; ?>>Cancelled</option>
-                                    <option value="Refunded" <?php echo $order['order_status'] === 'Refunded' ? 'selected' : ''; ?>>Refunded</option>
-                                </select>
-                                <button type="submit" name="update_status" class="btn btn-primary">Update</button>
-                            </form>
+                            <?php if ($order['order_status'] === 'Pending' || $order['order_status'] === 'Confirmed'): ?>
+                                <form method="post" action="">
+                                    <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order['order_id']); ?>">
+                                    <select name="status">
+                                        <option value="Pending" <?php echo $order['order_status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
+                                        <option value="Confirmed" <?php echo $order['order_status'] === 'Confirmed' ? 'selected' : ''; ?>>Confirmed</option>
+                                        <option value="Completed" <?php echo $order['order_status'] === 'Completed' ? 'selected' : ''; ?>>Completed</option>
+                                        <option value="Cancelled" <?php echo $order['order_status'] === 'Cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                                        <option value="Refunded" <?php echo $order['order_status'] === 'Refunded' ? 'selected' : ''; ?>>Refunded</option>
+                                    </select>
+                                    <button type="submit" name="update_status" class="btn btn-primary">Update</button>
+                                </form>
+                            <?php else: ?>
+                                <span>N/A</span>
+                            <?php endif; ?>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-
-            <!-- <tbody>
-                <?php foreach ($orders as $order): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($order['order_id']); ?></td>
-                        <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
-                        <td><?php echo htmlspecialchars($order['product_details']); ?></td>
-                        <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
-                        <td><?php echo date('F j, Y', strtotime($order['order_date'])); ?></td>
-                        <td><?php echo date('F j, Y', strtotime($order['delivery_date'])); ?></td>
-                        <td><?php echo htmlspecialchars($order['order_status']); ?></td>
-                        <td>
-                            <form method="post" action="">
-                                <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order['order_id']); ?>">
-                                <select name="status">
-                                    <option value="Pending" <?php echo $order['order_status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                                    <option value="Confirmed" <?php echo $order['order_status'] === 'Confirmed' ? 'selected' : ''; ?>>Confirmed</option>
-                                    <option value="Completed" <?php echo $order['order_status'] === 'Completed' ? 'selected' : ''; ?>>Completed</option>
-                                    <option value="Cancelled" <?php echo $order['order_status'] === 'Cancelled' ? 'selected' : ''; ?>>Cancelled</option>
-                                    <option value="Refunded" <?php echo $order['order_status'] === 'Refunded' ? 'selected' : ''; ?>>Refunded</option>
-                                </select>
-                                <button type="submit" name="update_status" class="btn btn-primary">Update</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody> -->
         </table>
     </section>
 </body>

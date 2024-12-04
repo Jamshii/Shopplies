@@ -45,17 +45,57 @@ if (empty($cart_items)) {
 // Calculate total
 $total = array_sum(array_column($cart_items, 'subtotal'));
 
-// Calculate estimated delivery date (current date + 3 days)
-$delivery_date = date('Y-m-d', strtotime('+3 days')); // MySQL DATE format
+// Use today's date as the purchase date
+$purchaseDate = date('Y-m-d'); // Current date in MySQL format
+$delivery_date = calculateDeliveryDate($purchaseDate);
+
+function calculateDeliveryDate($purchaseDate)
+{
+    // Convert purchase date to DateTime object
+    $date = new DateTime($purchaseDate);
+    $dayOfWeek = $date->format('N'); // 1 = Monday, ..., 7 = Sunday
+
+    // If the day is Saturday
+    if ($dayOfWeek == 6) {
+        $date->modify('+1 day');
+    }
+
+    // Add 3 weekdays
+    $deliveryDays = 0;
+    while ($deliveryDays < 3) {
+        $date->modify('+1 day');
+        if ($date->format('N') < 6) { // Only count weekdays (1-5)
+            $deliveryDays++;
+        }
+    }
+
+    return $date;
+}
+
+// Get today's date
+$purchaseDate = date('Y-m-d'); // Current date
+$deliveryDate = calculateDeliveryDate($purchaseDate);
+
+// For database storage (MySQL DATE format)
+$mysqlDate = $deliveryDate->format('Y-m-d');
+
+// For display (formatted)
+$displayDate = $deliveryDate->format('l, F j, Y');
+
+function generateOrderToken()
+{
+    return bin2hex(random_bytes(16)); // Generates a 32-character hexadecimal string
+}
 
 // Handle order submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
     $order_date = date('Y-m-d H:i:s');
+    $order_token = generateOrderToken();
     $status = 'Pending';
 
     // Insert the order
-    $stmt = $conn->prepare("INSERT INTO orders (customer_id, total_amount, order_date, order_status, delivery_date) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("idsss", $customer_id, $total, $order_date, $status, $delivery_date);
+    $stmt = $conn->prepare("INSERT INTO orders (customer_id, order_token, total_amount, order_date, order_status, delivery_date) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isdsss", $customer_id, $order_token, $total, $order_date, $status, $mysqlDate);
     $stmt->execute();
     $order_id = $stmt->insert_id; // Get the inserted order ID
     $stmt->close();
@@ -74,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
     $stmt->execute();
     $stmt->close();
 
-    // Redirect to order confirmation
-    header("Location: order_confirmation.php?order_id=$order_id");
+    // Redirect to order confirmation using order_token
+    header("Location: order_confirmation.php?order_token=$order_token");
     exit;
 }
 ?>
@@ -108,16 +148,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
                 <?php foreach ($cart_items as $item): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($item['name']); ?></td>
-                        <td>$<?php echo number_format($item['price'], 2); ?></td>
+                        <td>&#8369;<?php echo number_format($item['price'], 2); ?></td>
                         <td><?php echo $item['quantity']; ?></td>
-                        <td>$<?php echo number_format($item['subtotal'], 2); ?></td>
+                        <td>&#8369;<?php echo number_format($item['subtotal'], 2); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
 
-        <h3>Total: $<?php echo number_format($total, 2); ?></h3>
-        <p><strong>Estimated Delivery Date:</strong> <?php echo $delivery_date; ?></p>
+        <h3>Total: &#8369;<?php echo number_format($total, 2); ?></h3>
+        <p><strong>Estimated Delivery Date:</strong> <?php echo $displayDate; ?></p>
 
         <form method="post" action="">
             <button type="submit" name="checkout" class="btn btn-primary">Place Order</button>

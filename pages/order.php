@@ -26,24 +26,33 @@ $customer_id = $user['customer_id'];
 $message = "";
 
 // Cancel an order if requested
-if (isset($_GET['cancel_order_id'])) {
-    $order_id = intval($_GET['cancel_order_id']);
+// Handle order cancellation if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
+    $order_id = intval($_POST['order_id']);
+    $new_status = $_POST['status'];
 
-    // Update the order status to "Cancelled" only if it is pending
-    $stmt = $conn->prepare("UPDATE orders SET status = 'Cancelled' WHERE order_id = ? AND customer_id = ? AND status = 'Pending'");
-    $stmt->bind_param("ii", $order_id, $customer_id);
-    if ($stmt->execute() && $stmt->affected_rows > 0) {
-        $message = "Order cancelled successfully.";
-    } else {
-        $message = "Failed to cancel the order. Only pending orders can be cancelled.";
+    // Ensure the status is being set to "Cancelled"
+    if ($new_status === 'Cancelled') {
+        // Update the order status to "Cancelled" only if it is currently "Pending"
+        $stmt = $conn->prepare("UPDATE orders SET order_status = ? WHERE order_id = ? AND customer_id = ? AND order_status = 'Pending'");
+        $stmt->bind_param("sii", $new_status, $order_id, $customer_id);
+
+        if ($stmt->execute() && $stmt->affected_rows > 0) {
+            $message = "Order cancelled successfully.";
+        } else {
+            $message = "Failed to cancel the order. Only pending orders can be cancelled.";
+        }
+
+        $stmt->close();
     }
-    $stmt->close();
 }
+
 
 // Fetch orders for the logged-in user
 $stmt = $conn->prepare("
     SELECT 
         o.order_id, 
+        o.order_token,
         o.total_amount, 
         o.order_date, 
         o.delivery_date, 
@@ -118,24 +127,24 @@ $stmt->close();
                                 }
                                 ?>
                             </td>
-                            <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
+                            <td>&#8369;<?php echo number_format($order['total_amount'], 2); ?></td>
                             <td><?php echo date('F j, Y', strtotime($order['order_date'])); ?></td>
                             <td><?php echo date('F j, Y', strtotime($order['delivery_date'])); ?></td>
                             <td><?php echo htmlspecialchars($order['order_status']); ?></td>
                             <td>
-                                <!-- Update order status action buttons -->
-                                <form method="post" action="">
-                                    <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
-                                    <select name="status">
-                                        <option value="Pending" <?php echo $order['order_status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                                        <option value="Confirmed" <?php echo $order['order_status'] === 'Confirmed' ? 'selected' : ''; ?>>Confirmed</option>
-                                        <option value="Completed" <?php echo $order['order_status'] === 'Completed' ? 'selected' : ''; ?>>Completed</option>
-                                        <option value="Cancelled" <?php echo $order['order_status'] === 'Cancelled' ? 'selected' : ''; ?>>Cancelled</option>
-                                        <option value="Refunded" <?php echo $order['order_status'] === 'Refunded' ? 'selected' : ''; ?>>Refunded</option>
-                                    </select>
-                                    <button type="submit" name="update_status" class="btn btn-primary">Update</button>
-                                </form>
+                                <?php if ($order['order_status'] === 'Pending'): ?>
+                                    <a href="order_confirmation.php?order_token=<?= htmlspecialchars($order['order_token']) ?>">View Receipt</a>
+                                    <form method="post" action="">
+                                        <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
+                                        <input type="hidden" name="status" value="Cancelled">
+                                        <button type="submit" name="update_status" class="btn btn-danger">Cancel Order</button>
+                                    </form>
+                                <?php else: ?>
+                                    <!-- No buttons for other statuses -->
+                                    <a href="order_confirmation.php?order_token=<?= htmlspecialchars($order['order_token']) ?>">View Receipt</a>
+                                <?php endif; ?>
                             </td>
+
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

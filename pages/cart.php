@@ -9,36 +9,30 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];
 
-// Get the customer_id based on the username
-$stmt = $conn->prepare("SELECT customer_id FROM users WHERE username = ?");
+// Fetch user details
+$stmt = $conn->prepare("SELECT customer_id, address, phone_number FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
+//Get customer id
+$user_id = $user['customer_id']; // Store the user_id from the users table
+
+//Check if user is found
 if (!$user) {
     echo "<p>User not found.</p>";
     include '../includes/footer.php';
     exit;
 }
 
-$user_id = $user['customer_id']; // Store the user_id from the users table
+// Check if address or contact is missing
+if (empty($user['address']) || empty($user['contact'])) {
+    $message_err = "Please add your address and contact information in your profile to proceed to checkout.";
+    $address_missing = empty($user['address']);
+}
 
 $message = "";
-
-// Add to cart logic
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_quantity'])) {
-    $cart_id = $_POST['cart_id'];
-    $quantity = max(1, intval($_POST['quantity'])); // Ensure quantity is at least 1
-
-    // Update the shopping_cart table with the new quantity
-    $stmt = $conn->prepare("UPDATE shopping_cart SET quantity = ? WHERE cart_id = ? AND customer_id = ?");
-    $stmt->bind_param("iii", $quantity, $cart_id, $user_id);
-    $stmt->execute();
-    $stmt->close();
-
-    $message = "Cart updated successfully!";
-}
 
 // Remove item from cart
 if (isset($_GET['remove_cart_id'])) {
@@ -76,12 +70,17 @@ $total = array_sum(array_column($cart_items, 'subtotal'));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../assets/js/script.js" defer></script>
 </head>
 
 <body>
     <main>
         <h1>Your Shopping Cart</h1>
 
+        <?php if ($address_missing): ?>
+            <div class="message_error"><?php echo $message_err; ?></div>
+        <?php endif; ?>
         <?php if ($message): ?>
             <div class="message"><?php echo $message; ?></div>
         <?php endif; ?>
@@ -100,32 +99,37 @@ $total = array_sum(array_column($cart_items, 'subtotal'));
                 </thead>
                 <tbody>
                     <?php foreach ($cart_items as $item): ?>
-                        <tr>
-                            <td><img src="../assets/images/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>" width="50"></td>
-                            <td><?php echo htmlspecialchars($item['name']); ?></td>
-                            <td>&#8369;<?php echo number_format($item['price'], 2); ?></td>
+                        <tr data-cart-id="<?= $item['cart_id'] ?>">
                             <td>
-                                <form method="post" action="">
-                                    <input type="hidden" name="cart_id" value="<?php echo $item['cart_id']; ?>">
-                                    <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1">
-                                    <button type="submit" name="update_quantity" class="btn btn-secondary">Update Quantity</button>
-                                </form>
+                                <img src="../assets/images/<?= htmlspecialchars($item['image']); ?>"
+                                    alt="<?= htmlspecialchars($item['name']); ?>" width="50">
                             </td>
-                            <td>&#8369;<?php echo number_format($item['subtotal'], 2); ?></td>
+                            <td><?= htmlspecialchars($item['name']); ?></td>
+                            <td>&#8369;<?= number_format($item['price'], 2); ?></td>
                             <td>
-                                <a href="cart.php?remove_cart_id=<?php echo $item['cart_id']; ?>" class="btn btn-danger">Remove</a>
+                                <input
+                                    type="number"
+                                    class="quantity-input"
+                                    value="<?= $item['quantity']; ?>"
+                                    min="1"
+                                    data-cart-id="<?= $item['cart_id']; ?>"
+                                    data-price="<?= $item['price']; ?>">
+                            </td>
+                            <td class="subtotal">&#8369;<?= number_format($item['subtotal'], 2); ?></td>
+                            <td>
+                                <a href="cart.php?remove_cart_id=<?= $item['cart_id']; ?>" class="btn btn-danger">Remove</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
 
-            <h3>Total: &#8369;<?php echo number_format($total, 2); ?></h3>
+            <h3>Total: &#8369;<span id="total"><?= number_format($total, 2); ?></span></h3>
             <form method="post" action="checkout.php">
-                <button type="submit" class="btn btn-primary">Checkout</button>
+                <button type="submit" <?= $address_missing ? 'disabled' : '' ?>>Checkout</button>
             </form>
         <?php else: ?>
-            <p>Your cart is empty. <a href="homepage.php">Continue Shopping</a></p>
+            <p>Your cart is empty. <a href="product_list.php">Continue Shopping</a></p>
         <?php endif; ?>
     </main>
 

@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = mysqli_real_escape_string($conn, $password);
 
     // Check if the user exists
-    $query = "SELECT * FROM users WHERE username = '$username'";
+    $query = "SELECT * FROM users WHERE BINARY username = '$username'";
     $result = $conn->query($query);
 
     if ($result && $result->num_rows > 0) {

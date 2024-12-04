@@ -4,26 +4,20 @@ include '../config/db.php';
 
 // Ensure user is logged in
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit;
+    $username = "";
+} else {
+    $username = $_SESSION['username'];
+
+    // Get the customer_id based on the username
+    $stmt = $conn->prepare("SELECT customer_id FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    $user_id = $user['customer_id']; // Store the user_id from the users table
 }
 
-$username = $_SESSION['username'];
-
-// Get the customer_id based on the username
-$stmt = $conn->prepare("SELECT customer_id FROM users WHERE username = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
-$stmt->close();
-
-if (!$user) {
-    echo "<p>User not found.</p>";
-    include '../includes/footer.php';
-    exit;
-}
-
-$user_id = $user['customer_id']; // Store the user_id from the users table
 
 // Get product details
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -90,19 +84,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
 
         <div class="product-details">
             <img src="../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" style="max-width: 300px;">
-            <p><?php echo htmlspecialchars($product['description']); ?></p>
+            <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
             <p><strong>Price:</strong> &#8369;<?php echo number_format($product['price'], 2); ?></p>
             <p><strong>Stock:</strong> <?php echo $product['stock_quantity'] > 0 ? $product['stock_quantity'] : "Out of Stock"; ?></p>
 
             <?php if ($product['stock_quantity'] > 0): ?>
-                <form method="post" action="">
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?php echo $product['stock_quantity']; ?>">
-                    <button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
-                </form>
+                <?php if (!isset($_SESSION['username'])): ?>
+                    <!-- User not logged in -->
+                    <p>Please <a href="login.php">log in</a> to add this product to your cart.</p>
+                <?php else: ?>
+                    <!-- User logged in and stock is available -->
+                    <form method="post" action="">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?php echo $product['stock_quantity']; ?>">
+                        <button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                <?php endif; ?>
             <?php else: ?>
+                <!-- Product is out of stock -->
                 <p class="out-of-stock">This product is currently out of stock.</p>
             <?php endif; ?>
+
         </div>
     </main>
 

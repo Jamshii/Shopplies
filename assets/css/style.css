@@ -86,6 +86,14 @@ button:hover {
     opacity: 0.9;
 }
 
+button:disabled {
+    pointer-events: none;
+    background-color: #ccc;
+    color: #666;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .message {
     padding: 10px;
     background-color: #dff0d8;
@@ -94,8 +102,18 @@ button:hover {
     margin-bottom: 15px;
 }
 
+.message_error {
+    padding: 10px;
+    background-color: #f2dede; /* Light red background */
+    border: 1px solid #ebccd1; /* Light red border */
+    color: #a94442; /* Dark red text */
+    margin-bottom: 15px;
+}
+
 .btn.disabled {
     pointer-events: none;
+    background-color: #ccc;
+    color: #666;
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -107,4 +125,39 @@ button:hover {
 .category-filter select {
     padding: 5px;
     font-size: 16px;
+}
+
+#addProductForm {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+th, td {
+    text-align: left;
+}
+
+h2 {
+    margin-bottom: 20px;
 }
