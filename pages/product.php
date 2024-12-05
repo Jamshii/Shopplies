@@ -71,44 +71,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($product['name']); ?></title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body>
     <main>
-        <h1><?php echo htmlspecialchars($product['name']); ?></h1>
-
+    <div class = "product_wrapper">
         <?php if ($message): ?>
             <div class="message"><?php echo $message; ?></div>
         <?php endif; ?>
 
         <div class="product-details">
             <img src="../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" style="max-width: 300px;">
-            <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
-            <p><strong>Price:</strong> &#8369;<?php echo number_format($product['price'], 2); ?></p>
-            <p><strong>Stock:</strong> <?php echo $product['stock_quantity'] > 0 ? $product['stock_quantity'] : "Out of Stock"; ?></p>
-
-            <?php if ($product['stock_quantity'] > 0): ?>
-                <?php if (!isset($_SESSION['username'])): ?>
-                    <!-- User not logged in -->
-                    <p>Please <a href="login.php">log in</a> to add this product to your cart.</p>
-                <?php else: ?>
-                    <!-- User logged in and stock is available -->
-                    <form method="post" action="">
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?php echo $product['stock_quantity']; ?>">
-                        <button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
-                    </form>
-                <?php endif; ?>
-            <?php else: ?>
-                <!-- Product is out of stock -->
-                <p class="out-of-stock">This product is currently out of stock.</p>
-            <?php endif; ?>
-
+            <div class = "product-description">
+                <h1><?php echo htmlspecialchars($product['name']); ?></h1>
+                <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
+                <p><strong>Price:</strong> &#8369;<?php echo number_format($product['price'], 2); ?></p>
+                <p><strong>Stock:</strong> <?php echo $product['stock_quantity'] > 0 ? $product['stock_quantity'] : "Out of Stock"; ?></p>
+            </div>
         </div>
-    </main>
-
+        <?php if ($product['stock_quantity'] > 0): ?>
+                    <?php if (!isset($_SESSION['username'])): ?>
+                        <!-- User not logged in -->
+                        <p>Please <a href="login.php">log in</a> to add this product to your cart.</p>
+                    <?php else: ?>
+                        <!-- User logged in and stock is available -->
+                        <form method="post" action="">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?php echo $product['stock_quantity']; ?>">
+                            <button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <!-- Product is out of stock -->
+                    <p class="out-of-stock">This product is currently out of stock.</p>
+        <?php endif; ?>
+    </div>
+                </main>
+    <!-- <div class="clear"></div> -->
     <?php include '../includes/footer.php'; ?>
 </body>
-
 </html>

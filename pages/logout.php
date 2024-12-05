@@ -4,5 +4,5 @@ session_unset();
 session_destroy();
 
 // Redirect to the login page or homepage
-header("Location: /pages/login.php");
+header("Location: /shopplies/pages/login.php");
 exit();

@@ -3,18 +3,6 @@ include '../includes/header.php';
 // Include database configuration
 include '../config/db.php';
 
-// if (isset($_SESSION['username'])) {
-//     echo "User ID: " . $_SESSION['username'];
-// } else {
-//     echo "No session found.";
-// }
-
-// if (!isset($_SESSION['username'])) {
-//     header('Location: login.php');
-//     exit;
-// }
-
-
 // Fetch categories for the dropdown
 $categories = $conn->query("SELECT * FROM categories")->fetch_all(MYSQLI_ASSOC);
 
@@ -34,63 +22,52 @@ if ($selected_category_id) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - My E-Commerce</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <title>Shop Page</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
-
 <body>
-    <main>
 
-        <!--Category Filter-->
-        <div class="category-filter">
-            <form method="get" action="">
-                <label for="category">Filter by Category:</label>
-                <select id="category" name="category" onchange="this.form.submit()">
-                    <option value="">All Categories</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?php echo htmlspecialchars($category['category_id']); ?>"
-                            <?php echo $selected_category_id === (int)$category['category_id'] ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($category['name']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+    <main class = 'products-list'>
+        <!-- Filter Section -->
+        <section class="filters">
+        <form method="get" action="">
+            <label for="category-filter">Filter by Category:</label>
+            <select id="category" name="category" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?php echo htmlspecialchars($category['category_id']); ?>"
+                    <?php echo $selected_category_id === (int)$category['category_id'] ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($category['name']); ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
             </form>
-        </div>
+        </section>
 
-
-        <div class="product-grid">
+        <!-- Products Section -->
+        <section class="products">
+            <div class="product-grid">
             <?php if (!empty($products)): ?>
                 <?php foreach ($products as $product): ?>
                     <div class="product-card">
-                        <img src="../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" style="max-width: 300px;">
-                        <h2><?php echo htmlspecialchars($product['name']); ?></h2>
-                        <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
-                        <p><strong>$<?php echo number_format($product['price'], 2); ?></strong></p>
-
-                        <!-- Stock information -->
-                        <?php if ($product['stock_quantity'] > 0): ?>
-                            <p class="in-stock">In Stock: <?php echo $product['stock_quantity']; ?></p>
-                        <?php else: ?>
-                            <p class="out-of-stock" style="color: red;">Out of Stock</p>
-                        <?php endif; ?>
-
-                        <a href="product.php?id=<?php echo $product['product_id']; ?>" class="btn <?php echo $product['stock_quantity'] > 0 ? '' : ''; ?>">View Details</a>
+                        <img src="../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                        <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+                        <p><strong>₱<?php echo number_format($product['price'], 2); ?></strong></p>
+                        <a href="product.php?id=<?php echo $product['product_id']; ?>" class="btn <?php echo $product['stock_quantity'] > 0 ? '' : ''; ?>"><button>View Details</button></a>
                     </div>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <p>No products available at the moment. Check back later!</p>
+            <?php else: ?> <p>No products available at the moment. Check back later!</p>
             <?php endif; ?>
-        </div>
-
+            </div>
+        </section>
     </main>
 
     <?php include '../includes/footer.php'; ?>
 </body>
-
 </html>

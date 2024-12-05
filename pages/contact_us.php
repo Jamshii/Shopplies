@@ -51,6 +51,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
     <style>
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #f00000;
+            color: white;
+            height: 25px; /* Set a fixed height for the navbar */
+        }
+
+        header .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        header .logo img {
+            max-height: 100%; /* Ensures the logo fits within the navbar height */
+            max-width: 35px; /* You can adjust this if needed */
+            width: auto;
+            object-fit: contain;
+        }
+
+        header nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        header nav ul li {
+            margin-left: 1rem;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            margin-top: auto; /* Ensures the footer stays at the bottom */
+        }
+
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -124,14 +169,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button:hover {
             background-color: #0056b3;
         }
+        .product-desc {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Contact Us</h1>
-    <p>Have questions? In need of assistance? We’d be glad to help. </p>
-    <p>Shopplies doesn’t just provide a seamless and unique shopping experience, but also excellent customer service. </p>
-    <p>Message us for more inquiries about our available products, concerns and feedback. We look forward to assisting you with anything! </p>
+    <div class = "product-desc">
+        <h1>Contact Us</h1>
+        <p>Have questions? In need of assistance? We’d be glad to help. </p>
+        <p>Shopplies doesn’t just provide a seamless and unique shopping experience, but also excellent customer service. </p>
+        <p>Message us for more inquiries about our available products, concerns and feedback. We look forward to assisting you with anything! </p>
+    </div>    
     <div class="container">
         <!-- Comment Form -->
         <div class="form-container">

@@ -55,23 +55,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-<h1>Log In</h1>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+    <!-- Login Form -->
+    <!-- Login Page Section -->
+    <section class="login-page">
+        <!-- Left Side: Image -->
+        <div class="left-side">
+            <img class = "login-image" src="../assets/images/Background.png" alt="Login Image">
+        </div>
 
+        <!-- Right Side: Login Form -->
+        <div class="right-side">
+            <div class="container">
+                <h1>Login</h1>
+                <p>Please enter your username and password to log in.</p>
 
-<!-- Login Form -->
-<form method="post" action="">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    <!-- Display error messages -->
-    <?php if ($error): ?>
-        <p style="color: red;"><?php echo $error; ?></p>
-    <?php endif; ?>
-    <a href="register.php">Don't have an account? Register</a><br>
-    <a href="forgot_password.php">Forgot Password?</a><br>
-    <button type="submit">Log In</button>
-</form>
+                <form action="" method="POST" class="login-form">
+                    <div class = "login-info">
+                        <label for="username">Username</label>
+                        <div class="form-group">
+                            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                        </div>
+
+                        <label for="password">Password</label>
+                        <div class="form-group">
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    </div>
+                    <?php if ($error): ?>
+                    <p style="color: red;"><?php echo $error; ?></p>
+                    <?php endif; ?>
+
+                    <button type="submit" class="submit-btn">Login</button>
+
+                    <!-- Forgot Password Link -->
+                    <div class="form-footer">
+                        <p>Don't have an account? <a href="register.php">Register here</a></p>
+                        <p><a href="forgot_password.php">Forgot your password?</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
 <?php include '../includes/footer.php'; ?>
+</body>
+</html>

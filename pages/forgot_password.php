@@ -1,5 +1,5 @@
 <?php
-session_start();
+include '../includes/header.php';
 require_once '../config/db.php'; // Include database connection
 
 $message = "";
@@ -63,44 +63,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body>
-    <h1>Forgot Password</h1>
+<main>
+    
+</main>
+    <!-- Forgot Password Section -->
+    <section class="forgot-password">
+        <div class="container">
+            <h1>Forgot Password</h1>
+                <!-- Forgot Password Form -->
+                <?php if (!$show_reset_form): ?>
+                    <p>Enter your username to reset your password</p>
+                    <form method="POST" class="forgot-password-form">
+                        <div class="form-group">
+                            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                        </div>
+                        <button type="submit" class="submit-btn">Submit</button>
+                        <!-- Display message if any -->
+                        <?php if (!empty($message)): ?>
+                          <p style="color: red;"><?php echo $message; ?></p>
+                        <?php endif; ?>
+                        <!-- Back to Login Link -->
+                        <div class="form-footer">
+                            <p><a href="login.php">Back to Login</a></p>
+                        </div>
+                    </form>
+                <?php endif; ?>
 
-    <!-- Display message if any -->
-    <?php if (!empty($message)): ?>
-        <p style="color: red;"><?php echo $message; ?></p>
-    <?php endif; ?>
+                <!-- Reset Password Form (Hidden initially) -->
+                <?php if ($show_reset_form): ?>
+                    <p>Enter your new password</p>
+                    <form method="POST" class="forgot-password-form">
+                        <div class="form-group">
+                        <label for="new_password">New Password:</label>
+                        <input type="password" id="new_password" name="new_password" required>
 
-    <!-- Forgot Password Form -->
-    <?php if (!$show_reset_form): ?>
-        <form method="POST">
-            <label for="username">Enter your username:</label>
-            <input type="text" id="username" name="username" required>
-            <button type="submit">Submit</button>
-            <a href="login.php">
-                <button type="button">Cancel</button>
-            </a>
-        </form>
-    <?php endif; ?>
+                        <label for="confirm_password">Confirm New Password:</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                        </div>
 
-    <!-- Reset Password Form (Hidden initially) -->
-    <?php if ($show_reset_form): ?>
-        <form method="POST">
-            <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password" required>
+                        <button type="submit" class="submit-btn">Reset Password</button>
+                        <!-- Display message if any -->
+                        <?php if (!empty($message)): ?>
+                          <p style="color: red;"><?php echo $message; ?></p>
+                        <?php endif; ?>
+                        <!-- Back to Login Link -->
+                        <div class="form-footer">
+                            <p><a href="login.php">Back to Login</a></p>
+                        </div>
+                    </form>
+                <?php endif; ?>
+        </div>
+    </section>
 
-            <label for="confirm_password">Confirm New Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-
-            <button type="submit">Reset Password</button>
-            <a href="login.php">
-                <button type="button">Cancel</button>
-            </a>
-        </form>
-    <?php endif; ?>
+    <?php include '../includes/footer.php'; ?>
 </body>
 
 </html>
