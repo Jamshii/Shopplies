@@ -104,6 +104,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Already have an account? <a href="login.php">Log in here</a>.</p>
         </div>
     </div>
+
+    <section class="bottompage">
+    <div class="first">
+        <h1>CUSTOMER SERVICE</h1>
+        <div class="Customer">
+            <p><a href="wala pa functionality">Help Center</a></p>
+            <p><a href="wala pa functionality">Return & Refund</a></p>
+            <p><a href="wala pa functionality">Contact Us</a></p>
+        </div>
+    </div>
+    <div class="second">
+        <h1>ABOUT SHOPPLIES</h1>
+        <div class="About">
+            <p><a href="wala pa functionality">Privacy and Policy</a></p>
+            <p><a href="wala pa functionality">Shopplies Policies</a></p>
+        </div>
+    </div>
+
+    <div class="third">
+        <h1>FOLLOW US</h1>
+        <div class="Follow">
+            <p><a href="wala pa functionality">Instagram</a></p>
+            <p><a href="wala pa functionality">Facebook</a></p>
+            <p><a href="wala pa functionality">Twitter</a></p>
+            <p><a href="wala pa functionality">LinkedIn</a></p>
+        </div>
+    </div>
+    </section>
+
 </body>
 
 <?php include '../includes/footer.php'; ?>

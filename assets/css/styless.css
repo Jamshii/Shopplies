@@ -1,0 +1,168 @@
+.position{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.positions{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+th{
+    color: darkgray;    
+    background: white;
+    border-collapse: collapse;
+    border: 1px solid lightgray;
+    display: flex;
+}
+
+tr{
+    background: white;
+    border: 1px solid lightgray;
+    display: flex;
+}
+
+td{
+    padding: 55px;
+    text-align: center;
+    background: white;
+    border: 1px solid lightgray;
+    display: flex;
+}
+
+.bag{
+    width: 100px;
+    height: 100px;
+}
+.bag img{
+    width: 100%;
+    height: 100%;
+}
+
+.ballpen{
+    width: 100px;
+    height: 100px;
+}
+.ballpen img{
+    width: 100%;
+    height: 100%;
+}
+
+.stabilo{
+    width: 100px;
+    height: 100px;
+}
+.stabilo img{
+    width: 100%;
+    height: 100%;
+}
+
+.clips{
+    width: 100px;
+    height: 100px;
+}
+.clips img{
+    width: 100%;
+    height: 100%;
+}
+
+.cboard{
+    width: 100px;
+    height: 100px;
+}
+.cboard img{
+    width: 100%;
+    height: 100%;
+}
+
+.stapler{
+    width: 100px;
+    height: 100px;
+}
+.stapler img{
+    width: 100%;
+    height: 100%;
+}
+
+.nbook{
+    width: 100px;
+    height: 100px;
+}
+.nbook img{
+    width: 100%;
+    height: 100%;
+}
+
+.pencil{
+    width: 100px;
+    height: 100px;
+}
+.pencil img{
+    width: 100%;
+    height: 100%;
+}
+
+/*2nd column*/
+.ggun{
+    width: 100px;
+    height: 100px;
+}
+.ggun img{
+    width: 100%;
+    height: 100%;
+}
+
+.gstick{
+    width: 100px;
+    height: 100px;
+}
+.gstick img{
+    width: 100%;
+    height: 100%;
+}
+
+.puncher{
+    width: 100px;
+    height: 100px;
+}
+.puncher img{
+    width: 100%;
+    height: 100%;
+}
+
+.mtape{
+    width: 100px;
+    height: 100px;
+}
+.mtape img{
+    width: 100%;
+    height: 100%;
+}
+
+.sharp{
+    width: 100px;
+    height: 100px;
+}
+.sharp img{
+    width: 100%;
+    height: 100%;
+}
+
+.rule{
+    width: 100px;
+    height: 100px;
+}
+.rule img{
+    width: 100%;
+    height: 100%;
+}

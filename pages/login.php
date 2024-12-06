@@ -63,6 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
+    
+    <style>
+      .bottom {
+        background-color: white;
+        height: 30vh;
+        display: flex;
+      }
+    </style>
+    
 </head>
 <body>
     <!-- Login Form -->
@@ -70,8 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <section class="login-page">
         <!-- Left Side: Image -->
         <div class="left-side">
-            <img class = "login-image" src="../assets/images/Background.png" alt="Login Image">
+            <img src="../assets/images/Background.png" alt="Login Image" width="600" height="600">
         </div>
+        
 
         <!-- Right Side: Login Form -->
         <div class="right-side">
@@ -107,6 +117,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </section>
 
+    <section class="bottompage">
+    <div class="first">
+        <h1>CUSTOMER SERVICE</h1>
+        <div class="Customer">
+            <p><a href="wala pa functionality">Help Center</a></p>
+            <p><a href="wala pa functionality">Return & Refund</a></p>
+            <p><a href="wala pa functionality">Contact Us</a></p>
+        </div>
+    </div>
+    <div class="second">
+        <h1>ABOUT SHOPPLIES</h1>
+        <div class="About">
+            <p><a href="wala pa functionality">Privacy and Policy</a></p>
+            <p><a href="wala pa functionality">Shopplies Policies</a></p>
+        </div>
+    </div>
+
+    <div class="third">
+        <h1>FOLLOW US</h1>
+        <div class="Follow">
+            <p><a href="wala pa functionality">Instagram</a></p>
+            <p><a href="wala pa functionality">Facebook</a></p>
+            <p><a href="wala pa functionality">Twitter</a></p>
+            <p><a href="wala pa functionality">LinkedIn</a></p>
+        </div>
+    </div>
+    </section>
+     
 <?php include '../includes/footer.php'; ?>
 </body>
 </html>

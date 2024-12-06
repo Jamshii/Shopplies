@@ -324,12 +324,14 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .left-side img {
     max-width: 100%;
-    height: auto;
     object-fit: cover;
+    position: absolute;
+    height: auto;
 }
 
 .right-side {
@@ -506,4 +508,47 @@ footer {
 
 .register-container .register a:hover {
     text-decoration: underline;
+}
+
+.navbar a{
+    display: block;
+    padding: 12px;
+}
+
+.navbar a:hover{
+    background-color: darkred;
+}
+
+.bottompage{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20 px;
+
+}
+
+.first, .second, .third{
+    flex:0 1 auto;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    text-align: justify;
+}
+
+.first{
+    margin-left: 3cm;
+    margin-top: -14px;
+}
+.second{
+    margin-top: -40px;
+    margin-left: 1cm;
+}
+.third{
+    margin-left: 1cm;
+
+}
+
+.first a, .second a, .third a{
+    text-decoration: none;
+    color: black;
 }
