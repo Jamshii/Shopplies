@@ -64,56 +64,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body>
-    <h1>Register</h1>
-
-    <?php if ($error): ?>
+    <!-- Registration Form -->
+     <section class="register-page">
+     <div class="register-container">
+        <h1 id="register-title">Register</h1>
+        <?php if ($error): ?>
         <div class="error"><?php echo $error; ?></div>
-    <?php endif; ?>
+        <?php endif; ?>
 
-    <?php if ($success): ?>
-        <div class="success"><?php echo $success; ?></div>
-    <?php endif; ?>
-
-    <form method="post" action="">
-        <div class="form-group">
-            <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" required>
-        </div>
-
-        <div class="form-group">
-            <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name" required>
-        </div>
-
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-        </div>
-
-        <button type="submit">Register</button>
-    </form>
-
-    <p>Already have an account? <a href="login.php">Log in here</a>.</p>
+        <?php if ($success): ?>
+            <div class="success"><?php echo $success; ?></div>
+        <?php endif; ?>
+        <form method="POST" class="register-form" action="">
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.php">Log in here</a>.</p>
+    </div>
+     </section>
 </body>
+
 <?php include '../includes/footer.php'; ?>
 
 </html>

@@ -49,60 +49,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <title>Contact Us</title>
     <style>
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background-color: #f00000;
-            color: white;
-            height: 25px; /* Set a fixed height for the navbar */
-        }
-
-        header .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        header .logo img {
-            max-height: 100%; /* Ensures the logo fits within the navbar height */
-            max-width: 35px; /* You can adjust this if needed */
-            width: auto;
-            object-fit: contain;
-        }
-
-        header nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        header nav ul li {
-            margin-left: 1rem;
-        }
-
-        header nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
-            margin-top: auto; /* Ensures the footer stays at the bottom */
-        }
-
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
         }
-
+        .contact-page {
+            max-width: 800px;
+            margin: 20px auto auto auto;
+        }
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -158,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         button {
             padding: 10px;
-            background-color: #007BFF;
+            background-color: #cd2121;
             color: white;
             border: none;
             border-radius: 5px;
@@ -167,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #911414;
         }
         .product-desc {
             text-align: center;
@@ -176,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <div class="contact-page">
     <div class = "product-desc">
         <h1>Contact Us</h1>
         <p>Have questions? In need of assistance? We’d be glad to help. </p>
@@ -225,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
-
+    </div>
     <?php include '../includes/footer.php'; ?>
 </body>
 

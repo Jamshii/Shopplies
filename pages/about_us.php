@@ -11,51 +11,9 @@ include '../config/db.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <style>
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background-color: #f00000;
-            color: white;
-            height: 25px; /* Set a fixed height for the navbar */
-        }
-
-        header .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        header .logo img {
-            max-height: 100%; /* Ensures the logo fits within the navbar height */
-            max-width: 35px; /* You can adjust this if needed */
-            width: auto;
-            object-fit: contain;
-        }
-
-        header nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        header nav ul li {
-            margin-left: 1rem;
-        }
-
-        header nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
-            margin-top: auto; /* Ensures the footer stays at the bottom */
-        }
 
         /* General Styles */
         body {
@@ -98,7 +56,6 @@ include '../config/db.php';
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* About the Team Section */
         .team {
             background: #fff;
             padding: 20px;

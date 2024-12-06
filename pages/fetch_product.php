@@ -1,5 +1,4 @@
 <?php
-include '../includes/header.php';
 include '../config/db.php';
 
 // Ensure user is logged in
@@ -64,20 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($product['name']); ?></title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/styles.css">
-</head>
-
-<body>
-
-    <div class="product-wrapper">
+<div class="product-wrapper">
         <div class="product-details">
             <!-- Product Image -->
             <div class="product-image">
@@ -116,7 +102,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
             </div>
         </div>
     </div>
-    <!-- <div class="clear"></div> -->
-    <?php include '../includes/footer.php'; ?>
-</body>
-</html>

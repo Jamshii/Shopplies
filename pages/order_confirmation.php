@@ -119,11 +119,12 @@ if (isset($_GET['order_token'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body>
-    <main>
+    <main class="order-confirm-page">
         <h1>Thank You for Your Order!</h1>
 
         <h2>Order Summary</h2>
@@ -155,7 +156,7 @@ if (isset($_GET['order_token'])) {
             </tbody>
         </table>
 
-        <p><a href="order.php">View All Orders</a></p>
+        <p><a href="order.php" class="btn">View All Orders</a></p>
     </main>
 
     <?php include '../includes/footer.php'; ?>

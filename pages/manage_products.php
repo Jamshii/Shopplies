@@ -1,7 +1,7 @@
 <?php
 include '../includes/header.php';
 include '../config/db.php';
-
+$message = "";
 // Check if admin is logged in
 if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
     header('Location: login.php');
@@ -97,75 +97,141 @@ if ($selected_category_id) {
 ?>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Manage Products</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/script.js"></script>
+    <!-- Add Bootstrap for modern UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .mb-4 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f1f1f1;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .category-filter {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .btn {
+            margin-right: 5px;
+        }
+
+        .add-product {
+    padding: 0.5rem;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+            background-color: #00c864;
+        }
+
+        .add-product:hover {
+            background-color: #009c4e;;
+        }
+
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Add Products</h1>
-    <?php
-    // Display success message
-    $message = isset($_GET['message']) ? urldecode($_GET['message']) : null;
+    <div class="container">
+        <h1 class="mb-4">Manage Products</h1>
 
-    if ($message) {
-        echo "<div class='message'>{$message}</div>";
-    }
-    ?>
+        <!-- Success/Error Message -->
+        <?php if ($message): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $message; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
 
-    <!-- Add Product Button -->
-    <button id="showAddProductForm" class="btn btn-primary">Add Product</button>
-    <!-- Add Product Form -->
-    <div id="addProductForm" style="display: none;">
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="name">Product Name:</label>
-                <input type="text" id="name" name="name" required>
+        <!-- Add Product Modal -->
+        <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name">Product Name</label>
+                                <input type="text" id="name" name="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="number" id="price" name="price" class="form-control" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="stock">Stock Quantity</label>
+                                <input type="number" id="stock" name="stock" class="form-control" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category_id" class="form-select" required>
+                                    <option value="">Select a category</option>
+                                    <?php foreach ($categories as $category): ?>
+                                        <option value="<?php echo $category['category_id']; ?>">
+                                            <?php echo htmlspecialchars($category['name']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" id="image" name="image" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="add_product" class="btn btn-success">Add Product</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="number" id="price" name="price" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="stock">Stock Quantity:</label>
-                <input type="number" id="stock" name="stock" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <select id="category" name="category_id" required>
-                    <option value="">Select a category</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?php echo $category['category_id']; ?>">
-                            <?php echo htmlspecialchars($category['name']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="image">Image:</label>
-                <input type="file" id="image" name="image" required>
-            </div>
-            <button type="submit" name="add_product" class="btn btn-success">Confirm</button>
-            <button type="button" id="cancelAddProductForm" class="btn btn-secondary">Cancel</button>
-        </form>
-    </div>
+        </div>
 
-    <section>
-        <h2>Manage Products</h2>
+        <!-- Category Filter -->
         <div class="category-filter">
             <form method="get" action="">
-                <label for="category">Filter by Category:</label>
-                <select id="category" name="category" onchange="this.form.submit()">
+                <label for="category" class="form-label">Filter by Category:</label>
+                <select id="category" name="category" class="form-select" onchange="this.form.submit()">
                     <option value="">All Categories</option>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?php echo htmlspecialchars($category['category_id']); ?>"
@@ -176,44 +242,26 @@ if ($selected_category_id) {
                 </select>
             </form>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($products as $product): ?>
-                    <?php if ($editing_product_id === (int)$product['product_id']): ?>
-                        <!-- Edit Form -->
-                        <tr>
-                            <form method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                                <input type="hidden" name="current_image" value="<?php echo $product['image']; ?>">
-                                <input type="hidden" name="category" value="<?php echo htmlspecialchars($selected_category_id); ?>">
-                                <td><?php echo $product['product_id']; ?></td>
-                                <td><input type="text" name="name" value="<?php echo htmlspecialchars($product['name']); ?>" required></td>
-                                <td><textarea name="description"><?php echo htmlspecialchars($product['description']); ?></textarea></td>
-                                <td><input type="number" name="price" value="<?php echo $product['price']; ?>" step="0.01"></td>
-                                <td><input type="number" name="stock_quantity" value="<?php echo $product['stock_quantity']; ?>"></td>
-                                <td>
-                                    <input type="file" name="image">
-                                    <img src="../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" width="50">
-                                </td>
-                                <td>
-                                    <button type="submit" name="update_product">Save</button>
-                                    <a href="manage_products.php<?php echo $selected_category_id ? '?category=' . htmlspecialchars($selected_category_id) : ''; ?>">Cancel</a>
-                                </td>
-                            </form>
-                        </tr>
-                    <?php else: ?>
-                        <!-- Regular Row -->
+
+                        <!-- Add Product Button -->
+        <button class="add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+
+        <!-- Product Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($products as $product): ?>
                         <tr>
                             <td><?php echo $product['product_id']; ?></td>
                             <td><?php echo htmlspecialchars($product['name']); ?></td>
@@ -222,16 +270,73 @@ if ($selected_category_id) {
                             <td><?php echo $product['stock_quantity']; ?></td>
                             <td><img src="../assets/images/<?php echo htmlspecialchars($product['image']); ?>" width="50"></td>
                             <td>
-                                <a href="manage_products.php?edit_product_id=<?php echo $product['product_id']; ?>&category=<?php echo htmlspecialchars($selected_category_id); ?>">Edit</a>
+                                <!-- Edit Button -->
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal<?php echo $product['product_id']; ?>">Edit</button>
                             </td>
                         </tr>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </section>
 
+                        <!-- Edit Product Modal -->
+                        <div class="modal fade" id="editProductModal<?php echo $product['product_id']; ?>" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" enctype="multipart/form-data">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                                            <input type="hidden" name="current_image" value="<?php echo $product['image']; ?>">
+                                            
+                                            <div class="form-group">
+                                                <label for="name">Product Name</label>
+                                                <input type="text" id="name" name="name" class="form-control" value="<?php echo htmlspecialchars($product['name']); ?>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="description">Description</label>
+                                                <textarea id="description" name="description" class="form-control" rows="3" required><?php echo htmlspecialchars($product['description']); ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="price">Price</label>
+                                                <input type="number" id="price" name="price" class="form-control" value="<?php echo $product['price']; ?>" step="0.01" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="stock">Stock Quantity</label>
+                                                <input type="number" id="stock" name="stock" class="form-control" value="<?php echo $product['stock_quantity']; ?>" min="0" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="category">Category</label>
+                                                <select id="category" name="category_id" class="form-select" required>
+                                                    <option value="">Select a category</option>
+                                                    <?php foreach ($categories as $category): ?>
+                                                        <option value="<?php echo $category['category_id']; ?>" <?php echo $category['category_id'] == $product['category_id'] ? 'selected' : ''; ?>>
+                                                            <?php echo htmlspecialchars($category['name']); ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="image">Image</label>
+                                                <input type="file" id="image" name="image" class="form-control">
+                                                <small>Leave empty to keep current image.</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" name="edit_product" class="btn btn-warning">Update Product</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

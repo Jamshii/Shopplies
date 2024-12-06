@@ -127,44 +127,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body>
-    <main>
-        <h1>Checkout</h1>
+    <main class="checkout-container">
+        <h1 class="text-center mb-4">Checkout</h1>
 
-        <h2>Order Summary</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($cart_items as $item): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($item['name']); ?></td>
-                        <td>&#8369;<?php echo number_format($item['price'], 2); ?></td>
-                        <td><?php echo $item['quantity']; ?></td>
-                        <td>&#8369;<?php echo number_format($item['subtotal'], 2); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?php if (!empty($cart_items)): ?>
+            <section class="order-summary mb-4">
+                <h2>Order Summary</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($cart_items as $item): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($item['name']); ?></td>
+                                    <td>&#8369;<?php echo number_format($item['price'], 2); ?></td>
+                                    <td><?php echo $item['quantity']; ?></td>
+                                    <td>&#8369;<?php echo number_format($item['subtotal'], 2); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-        <h3>Total: &#8369;<?php echo number_format($total, 2); ?></h3>
-        <p><strong>Estimated Delivery Date:</strong> <?php echo $displayDate; ?></p>
+            <section class="checkout-details">
+                <h3>Total: <span class="total-amount">&#8369;<?php echo number_format($total, 2); ?></span></h3>
+                <p class="mb-4"><strong>Estimated Delivery Date:</strong> <?php echo $displayDate; ?></p>
 
-        <form method="post" action="">
-            <button type="submit" name="checkout" class="btn btn-primary">Place Order</button>
-        </form>
+                <form method="post" action="">
+                    <button type="submit" name="checkout" class="btn btn-primary btn-lg w-100">Place Order</button>
+                </form>
+            </section>
+        <?php else: ?>
+            <section class="empty-cart text-center">
+                <p class="lead">Your cart is empty.</p>
+                <a href="homepage.php" class="continue-shopping-link">Continue Shopping</a>
+            </section>
+        <?php endif; ?>
     </main>
 
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <?php include '../includes/footer.php'; ?>
 </body>
 
 </html>
+

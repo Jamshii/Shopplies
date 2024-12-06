@@ -46,22 +46,24 @@ $orders = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
     <title>Manage Orders</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body>
-    <h1>Manage Orders</h1>
-    <?php if (isset($message)) echo "<div class='message'>$message</div>"; ?>
+    <main class="manage-order-page">
+    <div class="container">
+        <h1>Manage Orders</h1>
+        <?php if (isset($message)): ?>
+            <div class="message"><?php echo htmlspecialchars($message); ?></div>
+        <?php endif; ?>
 
-    <!-- Manage Orders -->
-    <section>
         <table>
             <thead>
                 <tr>
@@ -88,22 +90,18 @@ $orders = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
                         <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
                         <td><?php echo htmlspecialchars($order['address']); ?></td>
                         <td>
-                            <?php
-                            // Display product names, quantities, and images
-                            for ($i = 0; $i < count($product_names); $i++) {
-                                echo htmlspecialchars($product_names[$i]); // Product name and quantity
-                                echo "<br>";
-                                // Display the product image
-                                $image_path = trim($product_images[$i]); // Remove any leading/trailing spaces
-                                echo "<img src='../assets/images/" . htmlspecialchars($image_path) . "' alt='" . htmlspecialchars($product_names[$i]) . "' style='width: 50px; height: 50px; margin-top: 5px;' /><br>";
-                            }
-                            ?>
+                            <?php for ($i = 0; $i < count($product_names); $i++): ?>
+                                <div>
+                                    <span><?php echo htmlspecialchars($product_names[$i]); ?></span><br>
+                                    <img src="../assets/images/<?php echo htmlspecialchars(trim($product_images[$i])); ?>" alt="Product Image">
+                                </div>
+                            <?php endfor; ?>
                         </td>
                         <td>&#8369;<?php echo number_format($order['total_amount'], 2); ?></td>
                         <td><?php echo date('F j, Y', strtotime($order['order_date'])); ?></td>
                         <td><?php echo date('F j, Y', strtotime($order['delivery_date'])); ?></td>
                         <td><?php echo htmlspecialchars($order['order_status']); ?></td>
-                        <td>
+                        <td class="actions">
                             <?php if ($order['order_status'] === 'Pending' || $order['order_status'] === 'Confirmed'): ?>
                                 <form method="post" action="">
                                     <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order['order_id']); ?>">
@@ -119,13 +117,13 @@ $orders = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
                             <?php else: ?>
                                 <span>N/A</span>
                             <?php endif; ?>
-
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-    </section>
+    </div>
+    </main>
 </body>
 
 </html>

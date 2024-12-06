@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['is_admin'] = false; // Regular user
 
             // Redirect to home page
-            header("Location: homepage.php");
+            header("Location: product_list.php");
             exit();
         } else {
             $error = "Invalid username or password.";
@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
@@ -77,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="right-side">
             <div class="container">
                 <h1>Login</h1>
-                <p>Please enter your username and password to log in.</p>
 
                 <form action="" method="POST" class="login-form">
                     <div class = "login-info">

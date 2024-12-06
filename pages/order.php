@@ -80,11 +80,12 @@ $stmt->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order History</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body>
-    <main>
+    <main class = "order-page">
         <h1>Your Orders</h1>
 
         <?php if ($message): ?>
@@ -137,7 +138,7 @@ $stmt->close();
                                     <form method="post" action="">
                                         <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
                                         <input type="hidden" name="status" value="Cancelled">
-                                        <button type="submit" name="update_status" class="btn btn-danger">Cancel Order</button>
+                                        <button type="submit" name="update_status" class="btn btn-danger">Cancel</button>
                                     </form>
                                 <?php else: ?>
                                     <!-- No buttons for other statuses -->

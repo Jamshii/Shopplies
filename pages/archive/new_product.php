@@ -31,10 +31,31 @@ if ($selected_category_id) {
     <title>Shop Page</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 
-    <main class = 'products-list'>
+<main class = 'products-list'>
         <!-- Filter Section -->
         <section class="filters">
         <form method="get" action="">
@@ -60,7 +81,10 @@ if ($selected_category_id) {
                         <img src="../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                         <h3><?php echo htmlspecialchars($product['name']); ?></h3>
                         <p><strong>₱<?php echo number_format($product['price'], 2); ?></strong></p>
-                        <a href="product.php?id=<?php echo $product['product_id']; ?>" class="btn <?php echo $product['stock_quantity'] > 0 ? '' : ''; ?>"><button>View Details</button></a>
+                        <button class="btn btn-primary view-details" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#productModal" 
+                                data-id="<?php echo $product['product_id']; ?>">View Details</button>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?> <p>No products available at the moment. Check back later!</p>
@@ -69,6 +93,46 @@ if ($selected_category_id) {
         </section>
     </main>
 
-    <?php include '../includes/footer.php'; ?>
+<!-- Modal Template -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Dynamic Product Details will load here -->
+                <div id="productDetails" class="text-center">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.view-details').on('click', function() {
+            const productId = $(this).data('id');
+            $('#productDetails').html('<p>Loading...</p>'); // Reset modal content
+
+            // Fetch product details via AJAX
+            $.ajax({
+                url: 'fetch_product.php', // Create a PHP file for fetching product data
+                method: 'GET',
+                data: { id: productId },
+                success: function(response) {
+                    $('#productDetails').html(response); // Inject content into modal body
+                },
+                error: function() {
+                    $('#productDetails').html('<p>Error loading product details.</p>');
+                }
+            });
+        });
+    });
+</script>
+
+<?php include '../includes/footer.php'; ?>
 </body>
 </html>

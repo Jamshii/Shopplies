@@ -39,49 +39,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
-
 <body>
+<div class="profile-page">
+<main>
+    <h1>My Profile</h1>
 
-    <main>
-        <h1>My Profile</h1>
-
+    <form method="post" action="profile.php">
+        <div class="form-group">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user['last_name']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($user['address']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone_number']); ?>" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
         <?php if (isset($message)): ?>
-            <div class="message"><?php echo $message; ?></div>
-        <?php endif; ?>
+        <div class="message"><?php echo $message; ?></div>
+    <?php endif; ?>
+    </form>
+</main>
+</div>
 
-        <form method="post" action="profile.php">
-            <div class="form-group">
-                <label for="first_name">First Name:</label>
-                <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="last_name">Last Name:</label>
-                <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user['last_name']); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($user['address']); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone_number']); ?>" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Profile</button>
-        </form>
-    </main>
+<?php include '../includes/footer.php'; ?>
 
-    <?php include '../includes/footer.php'; ?>
 </body>
-
 </html>
