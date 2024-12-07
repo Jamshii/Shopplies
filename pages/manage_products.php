@@ -322,7 +322,7 @@ if ($selected_category_id) {
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" name="edit_product" class="btn btn-warning">Update Product</button>
+                                            <button type="submit" name="update_product" class="btn btn-warning">Update Product</button>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
