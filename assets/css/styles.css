@@ -57,6 +57,18 @@ header nav ul li a {
     
 }
 
+.navbar{
+    display: block;
+    padding: 20px;
+
+}
+
+.navbar a:hover{
+    background-color: darkred;
+    padding: 20px;
+
+}
+
 header a {
     font-weight: bold;
 }

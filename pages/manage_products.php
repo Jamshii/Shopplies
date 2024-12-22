@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     $name = trim($_POST['name']);
     $description = strip_tags(trim($_POST['description']));
     $price = trim($_POST['price']);
-    $stock = trim($_POST['stock']);
+    $stock_quantity = trim($_POST['stock_quantity']);
     $category_id = intval($_POST['category_id']);
     $image = $_FILES['image']['name'];
 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
 
     // Insert product into database
     $stmt = $conn->prepare("INSERT INTO products (name, description, price, stock_quantity, category_id, image) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssdiss", $name, $description, $price, $stock, $category_id, $image);
+    $stmt->bind_param("ssdiss", $name, $description, $price, $stock_quantity, $category_id, $image);
     $stmt->execute();
     $stmt->close();
     $message = "Product added successfully!";
@@ -56,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_product'])) {
     }
 
     // Update product in the database
-    $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, image = ? WHERE product_id = ?");
-    $stmt->bind_param("ssdisi", $name, $description, $price, $stock_quantity, $image, $product_id);
+    $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, category_id=?, image = ? WHERE product_id = ?");
+    $stmt->bind_param("ssdiisi", $name, $description, $price, $stock_quantity, $category, $image, $product_id);
 
     if ($stmt->execute()) {
         // Redirect back to the filtered category with a success message
@@ -98,6 +98,7 @@ if ($selected_category_id) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,42 +120,51 @@ if ($selected_category_id) {
         .message {
             margin-bottom: 20px;
         }
+
         table {
             margin-top: 20px;
             border-collapse: collapse;
             width: 100%;
         }
-        table th, table td {
+
+        table th,
+        table td {
             padding: 10px;
             text-align: left;
         }
+
         table th {
             background-color: #f1f1f1;
         }
+
         table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+
         .category-filter {
             margin-bottom: 20px;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .btn {
             margin-right: 5px;
         }
 
         .add-product {
-    padding: 0.5rem;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+            padding: 0.5rem;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
             background-color: #00c864;
         }
 
         .add-product:hover {
-            background-color: #009c4e;;
+            background-color: #009c4e;
+            ;
         }
 
         @media (max-width: 768px) {
@@ -164,6 +174,7 @@ if ($selected_category_id) {
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1 class="mb-4">Manage Products</h1>
@@ -199,8 +210,8 @@ if ($selected_category_id) {
                                 <input type="number" id="price" name="price" class="form-control" step="0.01" required>
                             </div>
                             <div class="form-group">
-                                <label for="stock">Stock Quantity</label>
-                                <input type="number" id="stock" name="stock" class="form-control" min="0" required>
+                                <label for="stock_quantity">Stock Quantity</label>
+                                <input type="number" id="stock_quantity" name="stock_quantity" class="form-control" min="0" required>
                             </div>
                             <div class="form-group">
                                 <label for="category">Category</label>
@@ -243,7 +254,7 @@ if ($selected_category_id) {
             </form>
         </div>
 
-                        <!-- Add Product Button -->
+        <!-- Add Product Button -->
         <button class="add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
 
         <!-- Product Table -->
@@ -287,7 +298,7 @@ if ($selected_category_id) {
                                         <div class="modal-body">
                                             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                                             <input type="hidden" name="current_image" value="<?php echo $product['image']; ?>">
-                                            
+
                                             <div class="form-group">
                                                 <label for="name">Product Name</label>
                                                 <input type="text" id="name" name="name" class="form-control" value="<?php echo htmlspecialchars($product['name']); ?>" required>
@@ -301,12 +312,12 @@ if ($selected_category_id) {
                                                 <input type="number" id="price" name="price" class="form-control" value="<?php echo $product['price']; ?>" step="0.01" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="stock">Stock Quantity</label>
-                                                <input type="number" id="stock" name="stock" class="form-control" value="<?php echo $product['stock_quantity']; ?>" min="0" required>
+                                                <label for="stock_quantity">Stock Quantity</label>
+                                                <input type="number" id="stock_quantity" name="stock_quantity" class="form-control" value="<?php echo $product['stock_quantity']; ?>" min="0" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="category">Category</label>
-                                                <select id="category" name="category_id" class="form-select" required>
+                                                <select id="category" name="category" class="form-select" required>
                                                     <option value="">Select a category</option>
                                                     <?php foreach ($categories as $category): ?>
                                                         <option value="<?php echo $category['category_id']; ?>" <?php echo $category['category_id'] == $product['category_id'] ? 'selected' : ''; ?>>
@@ -339,4 +350,5 @@ if ($selected_category_id) {
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

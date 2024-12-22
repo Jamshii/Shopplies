@@ -31,7 +31,6 @@ $customer_id = $user['customer_id'];
 // Retrieve the order token and customer_id from session or URL
 if (isset($_GET['order_token'])) {
     $order_token = $_GET['order_token'];
-    //$customer_id = $_SESSION['customer_id'];  // Assuming customer_id is stored in session, adjust if needed
 
     // Fetch the order details (with customer_id validation)
     $stmt = $conn->prepare("
@@ -41,7 +40,7 @@ if (isset($_GET['order_token'])) {
         JOIN users u ON o.customer_id = u.customer_id
         WHERE o.order_token = ? AND o.customer_id = ?
     ");
-    $stmt->bind_param("si", $order_token, $user);
+    $stmt->bind_param("si", $order_token, $customer_id);
     $stmt->execute();
     $order_details = $stmt->get_result()->fetch_assoc();
     $stmt->close();
@@ -71,45 +70,6 @@ if (isset($_GET['order_token'])) {
     exit;
 }
 
-// // Validate the order ID
-// if (!isset($_GET['order_id']) || !is_numeric($_GET['order_id'])) {
-//     echo "No valid order ID found!";
-//     include '../includes/footer.php';
-//     exit;
-// }
-
-// $order_id = $_GET['order_id'];
-
-// // Fetch the order details (with customer_id validation)
-// $stmt = $conn->prepare("
-//     SELECT o.order_id, o.total_amount, o.order_date, o.delivery_date, o.order_status, 
-//            CONCAT(u.first_name, ' ', u.last_name) AS customer_name, u.address
-//     FROM orders o
-//     JOIN users u ON o.customer_id = u.customer_id
-//     WHERE o.order_id = ? AND o.customer_id = ?
-// ");
-// $stmt->bind_param("ii", $order_id, $customer_id);
-// $stmt->execute();
-// $order_details = $stmt->get_result()->fetch_assoc();
-// $stmt->close();
-
-// if (!$order_details) {
-//     echo "<p>Order not found.</p>";
-//     include '../includes/footer.php';
-//     exit;
-// }
-
-// // Fetch order items
-// $stmt = $conn->prepare("
-//     SELECT p.name AS product_name, oc.quantity, (oc.quantity * p.price) AS subtotal 
-//     FROM order_items oc
-//     JOIN products p ON oc.product_id = p.product_id
-//     WHERE oc.order_id = ?
-// ");
-// $stmt->bind_param("i", $order_id);
-// $stmt->execute();
-// $order_items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-// $stmt->close();
 ?>
 
 <!DOCTYPE html>

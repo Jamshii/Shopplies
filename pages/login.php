@@ -1,12 +1,6 @@
 <?php
 include '../includes/header.php';
-include '../config/db.php'; // Include database connection
-
-/*// Check if the user is already logged in
-if (isset($_SESSION['username'])) {
-    header("Location: homepage.php");
-    exit();
-}*/
+include '../config/db.php';
 
 $error = "";
 
@@ -58,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
+
 <body>
     <!-- Login Form -->
     <!-- Login Page Section -->
     <section class="login-page">
         <!-- Left Side: Image -->
         <div class="left-side">
-            <img class = "login-image" src="../assets/images/Background.png" alt="Login Image">
+            <img class="login-image" src="../assets/images/Background.png" alt="Login Image">
         </div>
 
         <!-- Right Side: Login Form -->
@@ -80,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h1>Login</h1>
 
                 <form action="" method="POST" class="login-form">
-                    <div class = "login-info">
+                    <div class="login-info">
                         <label for="username">Username</label>
                         <div class="form-group">
                             <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -89,10 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="password">Password</label>
                         <div class="form-group">
                             <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    </div>
+                        </div>
                     </div>
                     <?php if ($error): ?>
-                    <p style="color: red;"><?php echo $error; ?></p>
+                        <p style="color: red;"><?php echo $error; ?></p>
                     <?php endif; ?>
 
                     <button type="submit" class="submit-btn">Login</button>
@@ -107,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </section>
 
-<?php include '../includes/footer.php'; ?>
+    <?php include '../includes/footer.php'; ?>
 </body>
+
 </html>
